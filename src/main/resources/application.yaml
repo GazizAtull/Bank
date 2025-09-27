@@ -1,0 +1,53 @@
+spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            loggerLevel: BASIC
+  application:
+    version: @project.version@
+    name: @project.artifactId@
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:root}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/bank_service}
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog-master.xml
+    default-schema: public
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        show_sql: true
+        use_sql_comments: true
+        format_sql: true
+springdoc:
+  swagger-ui:
+    url: /openapi/api-spec.yml
+    path: docs
+    disable-swagger-default-url: true
+logging:
+  level:
+    com.gaziz.bank: TRACE
+settings:
+  security:
+    permit-all:
+      - /js/**
+      - /css/**
+      - /files/**
+      - /images/**
+      - /swagger-ui/**
+      - /docs/**
+      - /openapi/**
+      - /v3/api-docs/**
+      - /actuator/**
+    host: ${AUTH_HOST:http://localhost:8081}
+    client-id: ${AUTH_CLIENT_ID:bank_service_client_id}
+    client-secret: ${AUTH_CLIENT_SECRET:O406rKgvWDwdYBbyrvqwqR6a7cvMAco0}
+    introspect-uri: ${AUTH_INTROSPECT_URI:/realms/gaziz/protocol/openid-connect/token/introspect}
+    user-info-uri: ${AUTH_USER_INFO_URI:/realms/gaziz/protocol/openid-connect/userinfo}

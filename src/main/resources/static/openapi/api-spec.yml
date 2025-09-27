@@ -1,0 +1,100 @@
+openapi: 3.0.1
+info:
+  title: Bank service application API
+  version: '1.0.0'
+servers:
+  - url: 'http://localhost:8080'
+    description: local
+
+security:
+  - bearer-key: []
+paths: {}
+components:
+  #=================================== PARAMETERS ==============================#
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+    PageSizeParam:
+      name: pageSize
+      in: query
+      required: false
+      schema:
+        type: integer
+    StartDateParam:
+      name: startDate
+      in: query
+      required: false
+      schema:
+        type: string
+        format: "ISO 8601"
+    EndDateParam:
+      name: endDate
+      in: query
+      required: false
+      schema:
+        type: string
+        format: "ISO 8601"
+  #=================================== RESPONSES ==============================#
+  responses:
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BasicBackendResponse'
+    '401':
+      description: UNAUTHORIZED
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BasicBackendResponse'
+    404:
+      description: NOT_FOUND
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BasicBackendResponse'
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BasicBackendResponse'
+  #=================================== SCHEMAS ==============================#
+  schemas:
+    #=================================== BASIC SCHEMAS ==============================#
+    BasicBackendResponse:
+      type: object
+      required:
+        - meta
+      properties:
+        meta:
+          $ref: '#/components/schemas/MetaData'
+        errorCode:
+          type: string
+        description:
+          type: string
+    MetaData:
+      type: object
+      required:
+        - timestamp
+      properties:
+        timestamp:
+          type: string
+        totalItems:
+          type: integer
+          format: int64
+        page:
+          type: integer
+        pageSize:
+          type: integer
+  #=================================== SECURITY ==============================#
+  securitySchemes:
+    bearer-key:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
